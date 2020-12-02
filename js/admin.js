@@ -1,7 +1,5 @@
 jQuery( document ).ready(function() {
 
-console.log(leafletvars);
-
 
 	/*************************
 	* check if map data is active
