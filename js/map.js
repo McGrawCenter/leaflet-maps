@@ -5,6 +5,9 @@ jQuery( document ).ready(function() {
 
   if(jQuery("#LeafletMap").length > 0) {
   
+  
+  console.log(leafletvars);
+  
   	var mymap = jQuery("#LeafletMap");
   
 	if(mymap.attr('data-z')) {   var zoom = mymap.attr('data-z'); } else { var zoom = 20; }  

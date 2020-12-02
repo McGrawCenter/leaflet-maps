@@ -35,19 +35,17 @@ function puleaf_scripts()
   // this will be enqueue'd in the shortcode
   global $post;
   wp_register_script('leaflet-map-js', plugins_url('/js/map.js', __FILE__), array('jquery'),'1.1', true);
-  $data = array('postid' => $post->ID, 'ajaxurl'=> admin_url( 'admin-ajax.php' ));
+  
+  $data = array(
+    'postid' => $post->ID,
+    'ajaxurl' => admin_url( 'admin-ajax.php' )
+  );
+  if($basemap = get_option('leaflet_maps_basemap')) {  		$data['basemap'] = $basemap; }
+  if($overlay_image = get_option('leaflet_maps_overlay_image')) {  	$data['overlay_image'] = $overlay_image; }
+  if($overlay_coords = get_option('leaflet_maps_overlay_coords')) {  $data['overlay_coords'] = $overlay_coords; }
+  
   wp_localize_script( 'leaflet-map-js', 'leafletvars', $data);
-  
-  
-  
 
-  // this will be enqueue'd in the shortcode
-  /*
-  global $post;
-  wp_register_script('leaflet-singlemap-js', plugins_url('/js/singlemap.js', __FILE__), array('jquery'),'1.1', true);
-  $data = array('postid' => $post->ID, 'ajaxurl'=> admin_url( 'admin-ajax.php' ));
-  wp_localize_script( 'leaflet-singlemap-js', 'leafletvars', $data);
-  */
 }
 add_action( 'wp_enqueue_scripts', 'puleaf_scripts' );
 
