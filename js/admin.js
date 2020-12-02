@@ -1,96 +1,95 @@
 jQuery( document ).ready(function() {
 
+console.log(leafletvars);
 
 
-  jQuery(".puleaf-center").click(function(event){
-    var latLngs = [ marker.getLatLng() ];
-    var markerBounds = L.latLngBounds(latLngs);
-    map.fitBounds(markerBounds);
-  });
+	/*************************
+	* check if map data is active
+	*************************/
+	if(leafletvars.mapdata.active == 1) { 
+	 var coords = L.latLng(leafletvars.mapdata.lat, leafletvars.mapdata.lng);
+	 var center = coords;
+	 var zoom = leafletvars.mapdata.zoom;
+	}
+	else { 
+	  var coords = [0,0];
+	  var center = L.latLng(39.54529201504656, -97.13666451083057);
+	  var zoom = 4;
+	}
 
 
+	/*************************
+	* basemap
+	*************************/
+	var base = L.tileLayer( '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 
+	// create map
+	var map = L.map( 'MapLocation', {
+	  center: center,
+	  minZoom: 0,
+	  zoom: zoom,
+	  layers: [base]
+	});
 
-  jQuery(".puleaf-clear").click(function(event){
-    $("#Zoom").val('');
-    $("#Latitude").val('');
-    $("#Longitude").val('');
-  });
-
-
-  if(vars.mapdata.lat != '' && vars.mapdata.lng != '') {
-    var home_coords = [vars.mapdata.lat,vars.mapdata.lng];
-    var zoom = vars.mapdata.zoom;
-  }
-  else {
-    var home_coords = [40.346086213021394,285.34687042236334 ];
-    var zoom = 3;
-  }
-
-  var map = L.map('MapLocation').setView(home_coords, zoom);
-
-  L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
-  map.attributionControl.setPrefix(false);
-
-  var marker = new L.marker(home_coords, {
-    draggable: 'true'
-  });
+	/*************************
+	* add marker
+	*************************/
+        var marker = new L.marker( coords, { draggable: 'true' } ).addTo(map);
 
 
 
-  marker.on('dragend', function(event) {
-    var position = marker.getLatLng();
-    var zoom = map.getZoom();
+	/***************************
+	* double click the map 
+	***************************/
 
-    marker.setLatLng(position, {
-      draggable: 'true'
-    }).bindPopup(position).update();
+	map.on('dblclick', function(e) {
+	
+	  var position = [e.latlng.lat,e.latlng.lng];
+	  var zoom = map.getZoom();
 
-    $("#Zoom").val(zoom);
-    $("#Latitude").val(position.lat);
-    $("#Longitude").val(position.lng).keyup();
-  });
-
-
-  map.on('zoomend', function() {
-      var position = marker.getLatLng();
-      var zoom = map.getZoom();
-
-      jQuery("#Zoom").val(zoom);
-      jQuery("#Latitude").val(position.lat);
-      jQuery("#Longitude").val(position.lng);
-  });
-
-
-  map.on('dblclick', function(e) {
-    var position = [e.latlng.lat,e.latlng.lng];
-    var zoom = map.getZoom();
-    marker.setLatLng(position, {
-      draggable: 'true'
-    }).bindPopup(position).update();
-
-    jQuery("#Zoom").val(zoom);
-    jQuery("#Latitude").val(position.lat);
-    jQuery("#Longitude").val(position.lng);
-
-  });
-
-
-  jQuery("#Latitude, #Longitude").change(function() {
-    var position = [parseInt($("#Latitude").val()), parseInt($("#Longitude").val())];
-    marker.setLatLng(position, {
-      draggable: 'true'
-    }).bindPopup(position).update();
-    map.panTo(position);
-  });
-
-  map.addLayer(marker);
+	  marker.setLatLng(position, {
+	    draggable: 'true'
+	  }).bindPopup(position).update();
+	  
+	  jQuery("#Active").val('1');	 
+	  jQuery("#Zoom").val(zoom);
+	  jQuery("#Latitude").val(position.lat);
+	  jQuery("#Longitude").val(position.lng);
+       });
 
 
 
+	/***************************
+	* finish dragging  ********/
+	
+	marker.on('dragend', function(event) {
+	  var position = marker.getLatLng();
+	  var zoom = map.getZoom();
+
+	  marker.setLatLng(position, {
+	    draggable: 'true'
+	  }).bindPopup(position).update();
+
+	  jQuery("#Zoom").val(zoom);
+	  jQuery("#Latitude").val(position.lat);
+	  jQuery("#Longitude").val(position.lng).keyup();
+	  jQuery('#Show').prop('checked', true);
+	});
+	
+	
+	
+	/***************************
+	* finish zooming **********/
+	
+	map.on('zoomend', function() {
+	var position = marker.getLatLng();
+	var zoom = map.getZoom();
+
+	jQuery("#Zoom").val(zoom);
+	jQuery("#Latitude").val(position.lat);
+	jQuery("#Longitude").val(position.lng);
+	jQuery('#Show').prop('checked', true);      
+	});
 
 
 });
