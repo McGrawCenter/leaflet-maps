@@ -3,6 +3,7 @@
 /************************** ajax ******************************/
 
 add_action( 'wp_ajax_leaflet_markers', 'pu_leaflet_markers_ajax' );
+add_action( 'wp_ajax_nopriv_leaflet_markers', 'pu_leaflet_markers_ajax' );
 
 function pu_leaflet_markers_ajax() {
 

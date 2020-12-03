@@ -5,8 +5,7 @@ jQuery( document ).ready(function() {
 
   if(jQuery("#LeafletMap").length > 0) {
   
-  
-  console.log(leafletvars);
+ 
   
   	var mymap = jQuery("#LeafletMap");
   
@@ -17,8 +16,17 @@ jQuery( document ).ready(function() {
   	/*************************
 	* basemap
 	*************************/
-	var base = L.tileLayer( '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+	var base = L.tileLayer( leafletvars.basemap, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 
+  	/*************************
+	* overlays
+	*************************/
+	
+	if(leafletvars.overlay_image) { 
+	//leafletvars.overlay_coords
+	   var overlay = L.imageOverlay( leafletvars.overlay_image , [[44.58802208645281,-78.9443580617359],[34.50088595231422,-70.75644335168934]]);
+	}
+	
 
   	/*************************
 	* create map
@@ -27,8 +35,13 @@ jQuery( document ).ready(function() {
 	  center: center,
 	  minZoom: 0,
 	  zoom: zoom,
-	  layers: [base]
+	  layers: [base,overlay]
 	});
+	
+	
+	if(leafletvars.overlay_image) { 
+	   //L.control.layers(base).addTo(map);
+	}	
 
 
 	/*************************
