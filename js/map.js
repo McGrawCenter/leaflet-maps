@@ -5,7 +5,6 @@ jQuery( document ).ready(function() {
 
   if(jQuery("#LeafletMap").length > 0) {
   
- 
   
   	var mymap = jQuery("#LeafletMap");
   
@@ -17,15 +16,32 @@ jQuery( document ).ready(function() {
 	* basemap
 	*************************/
 	var base = L.tileLayer( leafletvars.basemap, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
-
+	var layers = [base];
+	
+	
   	/*************************
 	* overlays
 	*************************/
+
+	var overlays = []
+
+	if(leafletvars.overlays) {
 	
-	if(leafletvars.overlay_image) { 
-	//leafletvars.overlay_coords
-	   var overlay = L.imageOverlay( leafletvars.overlay_image , [[44.58802208645281,-78.9443580617359],[34.50088595231422,-70.75644335168934]]);
+	  var o = leafletvars.overlays.split('\r\n');
+	
+	  jQuery.each(o, function(i,v){
+	    var thiso = v.split(',');
+
+	    var nw = [thiso[2],thiso[3]]
+	    var se = [thiso[4],thiso[5]]
+	    var coords = [nw,se];
+	    var overlay = L.imageOverlay( thiso[1] , coords);
+	    overlays[thiso[0]] = overlay;
+	  })
+
 	}
+
+	var basemaps = {'My basemap': base };
 	
 
   	/*************************
@@ -35,13 +51,19 @@ jQuery( document ).ready(function() {
 	  center: center,
 	  minZoom: 0,
 	  zoom: zoom,
-	  layers: [base,overlay]
+	  layers: layers
 	});
 	
 	
-	if(leafletvars.overlay_image) { 
-	   //L.control.layers(base).addTo(map);
+	if(leafletvars.overlays) { 
+	   console.log(overlays[0]);
+	   L.control.layers(null,overlays).addTo(map);
 	}	
+
+
+
+
+
 
 
 	/*************************

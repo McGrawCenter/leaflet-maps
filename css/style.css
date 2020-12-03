@@ -12,3 +12,5 @@
 .leaflet-container a {
     font-size: 1.5em;
 }
+
+.leaflet-control-layers form { margin-bottom:0px; }
