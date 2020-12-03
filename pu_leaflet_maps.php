@@ -27,6 +27,7 @@ class PULeaflet {
 	update_option( 'leaflet_maps_basemap', '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' );
 	update_option( 'leaflet_maps_basemap_custom' , '' );
 	update_option( 'leaflet_maps_overlays' , '' );
+
 	update_option( 'leaflet_maps_on_post' , '1' );
 	update_option( 'leaflet_maps_on_page' , '' );
 	update_option( 'leaflet_maps_center' , '39.833333, -98.583333' );
@@ -94,10 +95,24 @@ class PULeaflet {
 
 	    global $post;
 	    if(isset($post->ID)) {
-	    if(!$puleafletmapdata =  json_decode(get_post_meta($post->ID, '_puleafletmap', true))) {
+	    
+	    
+	    /*
+	    if(!$puleafletmapdata =  json_decode(get_post_meta($post->ID, '_puleafletmap', true), JSON_OBJECT_AS_ARRAY)) {
 	      $puleafletmapdata = array();
 	    }
-	    wp_localize_script( 'puleaf', 'leafletvars', array( 'mapdata' => $puleafletmapdata ) );
+	    */
+	    $data = get_post_meta($post->ID, '_puleafletmap',true);
+
+	    if(!$puleafletmapdata = json_decode($data, true) ) {
+	      $puleafletmapdata = array();
+	    }
+
+	    if($basemap = get_option('leaflet_maps_basemap')) { $puleafletmapdata['basemap'] = $basemap; }
+	    if($basemap_custom = get_option('leaflet_maps_basemap_custom')) { $puleafletmapdata['basemap_custom'] = $basemap_custom; }
+	    if($overlays = get_option('leaflet_maps_overlays')) { $puleafletmapdata['overlays'] = $overlays; }
+
+	    wp_localize_script( 'puleaf', 'leafletvars', $puleafletmapdata );
 	    }
 
 	  }

@@ -23,22 +23,18 @@ jQuery( document ).ready(function() {
 	* overlays
 	*************************/
 
-	var overlays = []
+	var overlays = {}
 
 	if(leafletvars.overlays) {
-	
 	  var o = leafletvars.overlays.split('\r\n');
-	
 	  jQuery.each(o, function(i,v){
 	    var thiso = v.split(',');
-
 	    var nw = [thiso[2],thiso[3]]
 	    var se = [thiso[4],thiso[5]]
 	    var coords = [nw,se];
 	    var overlay = L.imageOverlay( thiso[1] , coords);
 	    overlays[thiso[0]] = overlay;
 	  })
-
 	}
 
 	var basemaps = {'My basemap': base };
@@ -55,8 +51,14 @@ jQuery( document ).ready(function() {
 	});
 	
 	
+  	/*************************
+	* turn layers 'on' by default and add control if there are overlays
+	*************************/
 	if(leafletvars.overlays) { 
-	   console.log(overlays[0]);
+	  for (x in overlays) {
+	    overlays[x].addTo(map);
+	    // if you only want to show the first overlay by default put 'break;' here
+	  }
 	   L.control.layers(null,overlays).addTo(map);
 	}	
 
