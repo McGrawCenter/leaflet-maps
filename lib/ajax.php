@@ -25,12 +25,14 @@ class PULeaflet_Ajax {
 		    if($data = get_post_meta($post->ID,'_puleafletmap',true)) {
 
 			$data = json_decode($data);
+			$thumb = get_the_post_thumbnail_url($post->ID, 'thumbnail');
 			if(isset($data->lat) && isset($data->lng)) {
 			  if($data->show) {
 			    $o = new StdClass();
 			    $o->ID = $post->ID;		    
 			    $o->post_title = $post->post_title;
 			    $o->post_excerpt = get_the_excerpt($post->ID);
+			    $o->thumbnail = $thumb;
 			    $o->latitude = $data->lat;
 			    $o->longitude = $data->lng;
 			    $o->url = get_permalink($post->ID);

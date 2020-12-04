@@ -71,6 +71,7 @@ jQuery( document ).ready(function() {
 	/*************************
 	* add markers
 	*************************/
+
 	  
 	  
 	  if(mymap.attr('data-id')) { // this is if we want one marker for one post
@@ -80,7 +81,8 @@ jQuery( document ).ready(function() {
 	  
 	      jQuery.each(data, function(i,v){
 		  var latlng = L.latLng(v.latitude,v.longitude);
-	  	  var marker = new L.marker(latlng, {}).bindPopup("<h5><a href='"+v.url+"'>"+v.post_title+"</a></h5>"+v.post_excerpt);
+		  var popup = popupTemplate(v);
+	  	  var marker = new L.marker(latlng, {}).bindPopup(popup);
 		  marker.addTo(map);
 	      });
 	      map.setView(center, zoom);
@@ -99,8 +101,10 @@ jQuery( document ).ready(function() {
 	    jQuery.get(leafletvars.ajaxurl, d, function(data){
 	  
 	      jQuery.each(data, function(i,v){
+	      console.log(v);
 		  var latlng = L.latLng(v.latitude,v.longitude);
-	  	  var marker = new L.marker(latlng, {}).bindPopup("<h5><a href='"+v.url+"'>"+v.post_title+"</a></h5>"+v.post_excerpt);
+		  var popup = popupTemplate(v);
+	  	  var marker = new L.marker(latlng, {}).bindPopup(popup);
 		  markers.push(marker);
 	      });
 	      var group = new L.featureGroup(markers);
@@ -109,6 +113,19 @@ jQuery( document ).ready(function() {
 	    });
 	    
 	  }
+	  
+	  
+	  
+	  function popupTemplate(obj) {
+	    var html = "";
+	    if(obj.thumbnail) {
+	      html = "<a href='"+obj.url+"'><img src='"+obj.thumbnail+"'/></a>";
+	    }
+	    html +=     "<h5><a href='"+obj.url+"'>"+obj.post_title+"</a></h5>";
+	    html +=      obj.post_excerpt;
+	    return html;
+	  }
+	  
   
 
 
