@@ -124,7 +124,6 @@ class PULeaflet {
 	  global $post;
 	  $digits = 5;
 	  $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);
-	  print_r(get_post_meta($post->ID,'_puleafletmap', true));
 
 	  if ($data = json_decode(get_post_meta($post->ID,'_puleafletmap', true))) {
 	    wp_enqueue_script('leaflet-map-js');
