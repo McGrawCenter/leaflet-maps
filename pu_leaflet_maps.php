@@ -21,6 +21,9 @@ class PULeaflet {
         add_filter( 'the_content', array( $this , 'content_filter' ) );
     }
     
+    
+    
+    
     function activate() {
 	// setting defaults   
 	

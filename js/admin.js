@@ -1,7 +1,31 @@
 jQuery( document ).ready(function() {
 
 
-	console.log(leafletvars);
+	jQuery(".puleaf-clear").click(function(e){
+	 jQuery("#Latitude").val('');
+	 jQuery("#Longitude").val('');
+	 var newLatLng = new L.LatLng(0, 0);
+	 marker.setLatLng(newLatLng, { draggable: 'true'}).bindPopup(position).update();
+	 
+    
+	    	 
+	 
+	 var d = {'action':'leaflet_clear','postid': postid }
+	 jQuery.get(leafletvars.ajaxurl, d, function(data){
+	   console.log(data);
+	 });
+	 e.preventDefault();
+	});
+
+
+	jQuery(".puleaf-center").click(function(e){
+	 console.log('center');
+	 e.preventDefault();
+	});
+
+
+
+
 
 	/*************************
 	* check if map data is active
@@ -73,6 +97,11 @@ jQuery( document ).ready(function() {
 	* add marker
 	*************************/
         var marker = new L.marker( coords, { draggable: 'true' } ).addTo(map);
+
+
+
+
+
 
 
 
