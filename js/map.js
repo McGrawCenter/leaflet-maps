@@ -8,9 +8,14 @@ jQuery( document ).ready(function() {
   
   	var mymap = jQuery("#LeafletMap");
   
-	if(mymap.attr('data-z')) {   var zoom = mymap.attr('data-z'); } else { var zoom = 20; }  
-	if(mymap.attr('data-lat')) { var center = [mymap.attr('data-lat'),mymap.attr('data-lng')]; } else { var center = [0,0]; }
-  
+	if(mymap.attr('data-z'))   	{ var zoom = mymap.attr('data-z'); } else { var zoom = 20; }
+	if(mymap.attr('data-center') != 'auto')  {
+	   var coords =  mymap.attr('data-center').split(',');
+	   var center = [coords[0], coords[1]];
+	} else { 
+	   var center = [0,0];
+	}  
+
   
   	/*************************
 	* basemap
@@ -101,15 +106,17 @@ jQuery( document ).ready(function() {
 	    jQuery.get(leafletvars.ajaxurl, d, function(data){
 	  
 	      jQuery.each(data, function(i,v){
-	      console.log(v);
 		  var latlng = L.latLng(v.latitude,v.longitude);
 		  var popup = popupTemplate(v);
 	  	  var marker = new L.marker(latlng, {}).bindPopup(popup);
 		  markers.push(marker);
 	      });
+	      
 	      var group = new L.featureGroup(markers);
 	      group.addTo(map);
-	      map.fitBounds(group.getBounds(), {padding: [50,50]});
+	      if(center[0] == 0 && center[1] == 0) {
+	        map.fitBounds(group.getBounds(), {padding: [50,50]});
+	      }
 	    });
 	    
 	  }
@@ -118,11 +125,11 @@ jQuery( document ).ready(function() {
 	  
 	  function popupTemplate(obj) {
 	    var html = "";
-	    if(obj.thumbnail) {
-	      html = "<a href='"+obj.url+"'><img src='"+obj.thumbnail+"'/></a>";
-	    }
-	    html +=     "<h5><a href='"+obj.url+"'>"+obj.post_title+"</a></h5>";
-	    html +=      obj.post_excerpt;
+	    //if(obj.thumbnail) {
+	    //  html = "<a href='"+obj.url+"'><img src='"+obj.thumbnail+"'/></a>";
+	    //}
+	    html +=     "<strong><a href='"+obj.url+"'>"+obj.post_title+"</a></strong>";
+	    //html +=      obj.post_excerpt;
 	    return html;
 	  }
 	  

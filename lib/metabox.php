@@ -46,6 +46,7 @@ class PULeaflet_Metabox {
 	  $data->show = 0;
 	}
 
+
 	?>
 
 
@@ -63,7 +64,7 @@ class PULeaflet_Metabox {
 	    <input type='checkbox' name='Location.Show' id='Show' <?php echo $showchecked; ?> value='1'/> <label for="Show">Show on big map</label><br />
 
 	    <label for="markertitle">Marker title (optional):</label><input type='text' id="markertitle" name='Location.Title' value='<?php echo $data->title; ?>' /> &nbsp;&nbsp;
-	   <input type='button' class='puleaf-clear' data-postid='<?php echo $post->ID; ?>' value='Clear Location'/>
+	   <input type='button' class='puleaf-clear' value='Clear Location'/>
 	   <input type='button' class='puleaf-center' value='Center Map'/>
 
 	   </div>

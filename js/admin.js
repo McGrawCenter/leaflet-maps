@@ -2,24 +2,24 @@ jQuery( document ).ready(function() {
 
 
 	jQuery(".puleaf-clear").click(function(e){
-	 jQuery("#Latitude").val('');
-	 jQuery("#Longitude").val('');
-	 var newLatLng = new L.LatLng(0, 0);
-	 marker.setLatLng(newLatLng, { draggable: 'true'}).bindPopup(position).update();
-	 
-    
-	    	 
-	 
-	 var d = {'action':'leaflet_clear','postid': postid }
-	 jQuery.get(leafletvars.ajaxurl, d, function(data){
-	   console.log(data);
-	 });
-	 e.preventDefault();
+	
+
+		
+		 jQuery("#Latitude").val('');
+		 jQuery("#Longitude").val('');
+		 jQuery("#Active").val('0');
+		 var newLatLng = new L.LatLng(0, 0);
+		 marker.setLatLng(newLatLng, { draggable: 'true'}).bindPopup(position).update();
+		 var d = {'action':'puleafletmap_clear','postid': leafletvars.postid }
+		 
+		 jQuery.get(leafletvars.ajaxurl, d, function(data){
+		   console.log(data);
+		 });
+		 e.preventDefault();
 	});
 
 
 	jQuery(".puleaf-center").click(function(e){
-	 console.log('center');
 	 e.preventDefault();
 	});
 

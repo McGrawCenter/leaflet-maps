@@ -98,24 +98,20 @@ class PULeaflet {
 
 	    global $post;
 	    if(isset($post->ID)) {
-	    
-	    
-	    /*
-	    if(!$puleafletmapdata =  json_decode(get_post_meta($post->ID, '_puleafletmap', true), JSON_OBJECT_AS_ARRAY)) {
-	      $puleafletmapdata = array();
-	    }
-	    */
-	    $data = get_post_meta($post->ID, '_puleafletmap',true);
+		    $data = get_post_meta($post->ID, '_puleafletmap',true);
 
-	    if(!$puleafletmapdata = json_decode($data, true) ) {
-	      $puleafletmapdata = array();
-	    }
+		    if(!$puleafletmapdata = json_decode($data, true) ) {
+		      $puleafletmapdata = array();
+		    }
 
-	    if($basemap = get_option('leaflet_maps_basemap')) { $puleafletmapdata['basemap'] = $basemap; }
-	    if($basemap_custom = get_option('leaflet_maps_basemap_custom')) { $puleafletmapdata['basemap_custom'] = $basemap_custom; }
-	    if($overlays = get_option('leaflet_maps_overlays')) { $puleafletmapdata['overlays'] = $overlays; }
+		    $puleafletmapdata['postid'] = $post->ID;
+		    $puleafletmapdata['ajaxurl'] = admin_url( 'admin-ajax.php' );
 
-	    wp_localize_script( 'puleaf', 'leafletvars', $puleafletmapdata );
+		    if($basemap = get_option('leaflet_maps_basemap')) { $puleafletmapdata['basemap'] = $basemap; }
+		    if($basemap_custom = get_option('leaflet_maps_basemap_custom')) { $puleafletmapdata['basemap_custom'] = $basemap_custom; }
+		    if($overlays = get_option('leaflet_maps_overlays')) { $puleafletmapdata['overlays'] = $overlays; }
+
+		    wp_localize_script( 'puleaf', 'leafletvars', $puleafletmapdata );
 	    }
 
 	  }
@@ -128,10 +124,11 @@ class PULeaflet {
 	  global $post;
 	  $digits = 5;
 	  $rand = rand(pow(10, $digits-1), pow(10, $digits)-1);
+	  print_r(get_post_meta($post->ID,'_puleafletmap', true));
 
 	  if ($data = json_decode(get_post_meta($post->ID,'_puleafletmap', true))) {
 	    wp_enqueue_script('leaflet-map-js');
-	    $html = "<div id='LeafletMap' data-id='{$post->ID}' data-z='{$data->zoom}' data-lat='{$data->lat}' data-lng='{$data->lng}' style='width:100%; height:350px;background:grey;'></div>";    
+	    $html = "<div id='LeafletMap' data-id='{$post->ID}' data-z='{$data->zoom}' data-center='{$data->lat},{$data->lng}' data-lat='{$data->lat}' data-lng='{$data->lng}' style='width:100%; height:350px;background:grey;'></div>";    
 	    return $html.$content;
 	  }
 	  else {return $content; }

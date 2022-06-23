@@ -5,7 +5,7 @@ class PULeaflet_Ajax {
     public function __construct() {
 	add_action( 'wp_ajax_leaflet_markers', array( $this , 'ajax_leafletmaps_output' ) );
 	add_action( 'wp_ajax_nopriv_leaflet_markers', array( $this , 'ajax_leafletmaps_output' ) );
-	add_action( 'wp_ajax_leaflet_clear', array( $this , 'ajax_leafletmaps_clear' ) );
+	add_action( 'wp_ajax_puleafletmap_clear', array( $this , 'ajax_puleafletmap_clear' ) );
     }
     
 
@@ -57,20 +57,22 @@ class PULeaflet_Ajax {
     
     
     
-    function ajax_leafletmaps_clear() {
-
-		if(isset($_GET['postid'])) { 
-		   $postid = $_GET['postid'];
-		   delete_post_meta($postid,'_puleafletmap');
-		   $data = array('message'=>'success');
+    function ajax_puleafletmap_clear() {
+    
+	if(isset($_GET['postid'])) { 
+	   $postid = $_GET['postid'];
 	   
-		}
-		else { 
-		   $data = array('message'=>'failed to clear post meta');
-		}
-	   echo json_encode($data);
- 	   die();			
-	   wp_die();
+	   delete_post_meta($postid,'_puleafletmap');
+	   $data = get_post_meta($postid);
+	   //$data = array('message'=>'success');
+	}
+	else { 
+	   $data = array('message'=>'failed to clear post meta');
+	}
+	header('Content-Type: application/json');
+	echo json_encode($data);
+ 	die();	
+	wp_die();
     }    
 	
 
